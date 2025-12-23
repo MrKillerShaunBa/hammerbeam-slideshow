@@ -10,7 +10,7 @@ config CUSTOM_ANIMATION_SPEED
     default 3000000
 
 # -----------------------------------------------------------------------------
-# LVGL core tuning
+# LVGL tuning
 # -----------------------------------------------------------------------------
 config LV_Z_VDB_SIZE
     default 100
@@ -22,13 +22,15 @@ config LV_Z_MEM_POOL_SIZE
     default 4096 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 
 # -----------------------------------------------------------------------------
-# LVGL COLOR DEPTH (CRITICAL FIX)
+# LVGL COLOR DEPTH
 #
-# We MUST allow 2-bit indexed images for nice_view / hammerbeam.
-# DO NOT force 1-bit.
+# IMPORTANT:
+# - This is DISPLAY color depth
+# - Indexed images do NOT require 2-bit depth here
+# - 1-bit is correct for SSD1306 / nice_view
 # -----------------------------------------------------------------------------
 choice LV_COLOR_DEPTH
-    default LV_COLOR_DEPTH_2
+    default LV_COLOR_DEPTH_1
 endchoice
 
 # -----------------------------------------------------------------------------
