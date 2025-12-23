@@ -5,7 +5,7 @@ if SHIELD_NICE_VIEW_CUSTOM
 
 config CUSTOM_ANIMATION_SPEED
     int "Total duration in milliseconds for animation to take"
-    default 300000
+    default 3000000
 
 config LV_Z_VDB_SIZE
     default 100
@@ -59,3 +59,4 @@ config ZMK_DISPLAY_STATUS_SCREEN_BUILT_IN
     select LV_FONT_MONTSERRAT_26
 
 endif # SHIELD_NICE_VIEW
+
