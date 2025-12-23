@@ -1,25 +1,39 @@
-# Copyright (c) 2023 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
 if SHIELD_NICE_VIEW_CUSTOM
 
+# -----------------------------------------------------------------------------
+# Animation timing
+# -----------------------------------------------------------------------------
 config CUSTOM_ANIMATION_SPEED
     int "Total duration in milliseconds for animation to take"
     default 3000000
 
+# -----------------------------------------------------------------------------
+# LVGL core tuning
+# -----------------------------------------------------------------------------
 config LV_Z_VDB_SIZE
     default 100
 
 config LV_DPI_DEF
     default 161
 
-config LV_Z_BITS_PER_PIXEL
-    default 1
+config LV_Z_MEM_POOL_SIZE
+    default 4096 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 
+# -----------------------------------------------------------------------------
+# LVGL COLOR DEPTH (CRITICAL FIX)
+#
+# We MUST allow 2-bit indexed images for nice_view / hammerbeam.
+# DO NOT force 1-bit.
+# -----------------------------------------------------------------------------
 choice LV_COLOR_DEPTH
-    default LV_COLOR_DEPTH_1
+    default LV_COLOR_DEPTH_2
 endchoice
 
+# -----------------------------------------------------------------------------
+# ZMK display configuration
+# -----------------------------------------------------------------------------
 choice ZMK_DISPLAY_WORK_QUEUE
     default ZMK_DISPLAY_WORK_QUEUE_DEDICATED
 endchoice
@@ -28,35 +42,32 @@ choice ZMK_DISPLAY_STATUS_SCREEN
     default ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
 endchoice
 
-config LV_Z_MEM_POOL_SIZE
-    default 4096 if ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
-
+# -----------------------------------------------------------------------------
+# nice_view custom widgets
+# -----------------------------------------------------------------------------
 config ZMK_DISPLAY_STATUS_SCREEN_CUSTOM
     imply NICE_VIEW_WIDGET_STATUS
 
 config NICE_VIEW_WIDGET_STATUS
     bool "Custom nice!view status widget"
     select LV_FONT_MONTSERRAT_16
+    select LV_FONT_MONTSERRAT_18
+    select LV_FONT_MONTSERRAT_14
+    select LV_FONT_UNSCII_8
     select LV_USE_IMG
     select LV_USE_CANVAS
-    select LV_USE_ANIMIMG 
+    select LV_USE_ANIMIMG
     select LV_USE_ANIMATION
+    select ZMK_WPM
 
 config NICE_VIEW_WIDGET_INVERTED
     bool "Invert custom status widget colors"
 
+# -----------------------------------------------------------------------------
+# Split keyboard handling
+# -----------------------------------------------------------------------------
 if !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
-
 config NICE_VIEW_WIDGET_STATUS
-    select LV_FONT_MONTSERRAT_18
-    select LV_FONT_MONTSERRAT_14
-    select LV_FONT_UNSCII_8
-    select ZMK_WPM
+endif
 
-endif # !ZMK_SPLIT || ZMK_SPLIT_ROLE_CENTRAL
-
-config ZMK_DISPLAY_STATUS_SCREEN_BUILT_IN
-    select LV_FONT_MONTSERRAT_26
-
-endif # SHIELD_NICE_VIEW
-
+endif # SHIELD_NICE_VIEW_CUSTOM
